@@ -49,6 +49,7 @@ public class Bat : MonoBehaviour {
     }
 
     protected void Update() {
+		animator.SetBool(isAliveBoolAnimParamId, isAlive);
         if (!isAlive) return;
 
         // Handle keyboard input.
@@ -58,19 +59,23 @@ public class Bat : MonoBehaviour {
             flyUp = false;
         }
         animator.SetBool(flyUpBoolAnimParamId, flyUp);
-        animator.SetBool(isAliveBoolAnimParamId, isAlive);
     }
 
     protected void FixedUpdate() {
         if (!isAlive) return;
         // EXERCISE: Set the bat's body.velocity so it will always move at
         //           xSpeed to the right and at flyYSpeed if it should fly up.
+		float upVelocity = body.velocity [1];
+		if (flyUp) {
+				upVelocity = flyYSpeed;
+		}
+			body.velocity = new Vector2 (xSpeed, upVelocity);
     }
 
     protected void OnCollisionEnter2D(Collision2D collision) {
         if (isInvulnerable) return;
-
         // EXERCISE: Stop flying and die.
+			isAlive = false;
     }
 
     private void OnTouchDown(PointerEventData e) {
